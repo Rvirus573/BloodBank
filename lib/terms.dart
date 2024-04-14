@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Terms extends StatefulWidget {
-  Terms({super.key});
+  const Terms({super.key});
 
   @override
   State<Terms> createState() => _TermsState();

@@ -102,7 +102,7 @@ class _SearchDonorState extends State<SearchDonor> {
                   const Color(0xff281537),
                 'assets/icon/baiust.png',
                 "    Search\nBlood Donor",
-                ""),
+                "rezaul"),
             const SizedBox(
               height: 10,
             ),
