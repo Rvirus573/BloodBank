@@ -32,7 +32,7 @@ Widget customTextFormField(TextEditingController controller, String hint,
   );
 }
 
-Widget customElevetedButton(name, MaterialStateProperty<Color> color, onPress) {
+Widget customElevetedButton(name, WidgetStatePropertyAll<Color> color, onPress) {
   return SizedBox(
     width: 300,
     child: ElevatedButton(

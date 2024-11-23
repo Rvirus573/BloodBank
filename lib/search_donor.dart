@@ -7,7 +7,6 @@ import 'package:bloodbank/widget/customcontainer_inkwell.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,6 +19,7 @@ class SearchDonor extends StatefulWidget {
 
 class _SearchDonorState extends State<SearchDonor> {
   late Stream<QuerySnapshot> userStream;
+  final firestore = FirebaseFirestore.instance.collection("users");
   FirebaseAuth userAuth = FirebaseAuth.instance;
   int _numberOfUsers = 0;
   int _numberOfUsersA1 = 0;
@@ -31,49 +31,91 @@ class _SearchDonorState extends State<SearchDonor> {
   int _numberOfUsersAB1 = 0;
   int _numberOfUsersAB2 = 0;
 
+  // ignore: prefer_typing_uninitialized_variables
+  //var lastdonateDate;
+
+  //int? _daysDifference;
+  DateTime? startDate;
+  String d = "";
+
+  // Function to select a start date
+
+  // Function to calculate the difference between the start date and the current date
+  // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
+  // int? _calculateDifference(BuildContext, lastdonateDate) {
+  //   DateFormat format = DateFormat("dd/MM/yyyy");
+  //   startDate = format.parse(lastdonateDate);
+  //   print(startDate);
+
+  //   DateTime currentDate = DateTime.now();
+  //   _daysDifference = currentDate.difference(startDate!).inDays;
+
+  //   return _daysDifference;
+  // }
+
   @override
   void initState() {
     userStream = FirebaseFirestore.instance.collection('users').snapshots();
 
+    // last_Donate_Date();
     _fetchUsersCount();
+
+    // Future.delayed(
+    //     const Duration(seconds: 2),
+    //     () => setState(() {
+    //          // print("date check 22 ${lastdonateDate.toString()}");
+
+    //           _calculateDifference(context, lastdonateDate);
+    //         }));
+
     super.initState();
   }
 
   Future<void> _fetchUsersCount() async {
-    QuerySnapshot usersSnapshot =
-        await FirebaseFirestore.instance.collection('users').get();
+    QuerySnapshot usersSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uservalue', isEqualTo: 1)
+        .get();
 
     QuerySnapshot usersSnapshotA1 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'A+')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotA2 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'A-')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotB1 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'B+')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotB2 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'B-')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotO1 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'O+')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotO2 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'O-')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotAB1 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'AB+')
+        .where('uservalue', isEqualTo: 1)
         .get();
     QuerySnapshot usersSnapshotAB2 = await FirebaseFirestore.instance
         .collection('users')
         .where('bloodGroup', isEqualTo: 'AB-')
+        .where('uservalue', isEqualTo: 1)
         .get();
 
     setState(() {
@@ -98,9 +140,9 @@ class _SearchDonorState extends State<SearchDonor> {
             customAppBar(
                 context,
                 200,
-                const Color(0xffB81736),
-                  const Color(0xff281537),
-                'assets/icon/baiust.png',
+               const Color.fromARGB(144, 4, 112, 45),
+              
+                'assets/icon/in.png',
                 "    Search\nBlood Donor",
                 ""),
             const SizedBox(
@@ -113,8 +155,6 @@ class _SearchDonorState extends State<SearchDonor> {
                 child: Row(
                   children: [
                     customContainerInkwell(() {
-                   
-
                       setState(() {
                         userStream = FirebaseFirestore.instance
                             .collection('users')
@@ -125,7 +165,6 @@ class _SearchDonorState extends State<SearchDonor> {
                       width: 10,
                     ),
                     customContainerInkwell(() {
-                     
                       setState(() {
                         userStream = FirebaseFirestore.instance
                             .collection('users')
@@ -138,7 +177,6 @@ class _SearchDonorState extends State<SearchDonor> {
                       width: 10,
                     ),
                     customContainerInkwell(() {
-                     
                       setState(() {
                         userStream = FirebaseFirestore.instance
                             .collection('users')
@@ -150,7 +188,6 @@ class _SearchDonorState extends State<SearchDonor> {
                       width: 10,
                     ),
                     customContainerInkwell(() {
-                  
                       setState(() {
                         userStream = FirebaseFirestore.instance
                             .collection('users')
@@ -162,12 +199,15 @@ class _SearchDonorState extends State<SearchDonor> {
                       width: 10,
                     ),
                     customContainerInkwell(() {
-                    
                       setState(() {
+                        _numberOfUsersB2 > 0 ?
+                        
                         userStream = FirebaseFirestore.instance
                             .collection('users')
                             .where("bloodGroup", isEqualTo: "B-")
-                            .snapshots();
+                            .snapshots():Center(
+                            
+                              child: Text("No Data")); 
                       });
                     }, "B-\n$_numberOfUsersB2"),
                     const SizedBox(
@@ -198,7 +238,6 @@ class _SearchDonorState extends State<SearchDonor> {
                       width: 10,
                     ),
                     customContainerInkwell(() {
-                    
                       setState(() {
                         userStream = FirebaseFirestore.instance
                             .collection('users')
@@ -211,7 +250,6 @@ class _SearchDonorState extends State<SearchDonor> {
                     ),
                     customContainerInkwell(
                       () {
-                   
                         setState(() {
                           userStream = FirebaseFirestore.instance
                               .collection('users')
@@ -246,6 +284,12 @@ class _SearchDonorState extends State<SearchDonor> {
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
+
+                      //  DateFormat format = DateFormat("d/m/yyyy");
+                    //  lastdonateDate = data['date'];
+
+                      //startDate = format.parse(lastdonateDate);
+                      if (data['uservalue'] == 1) {}
                       return Padding(
                         padding: const EdgeInsets.only(left: 5, right: 5),
                         child: Card(
@@ -290,6 +334,9 @@ class _SearchDonorState extends State<SearchDonor> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
+                                                          const SizedBox(
+                                                            height: 50,
+                                                          ),
                                                           custom_profile2(
                                                             "Name: ",
                                                             "${data['name']}",
@@ -314,7 +361,6 @@ class _SearchDonorState extends State<SearchDonor> {
                                                             "Blood Group: ",
                                                             "${data['bloodGroup']}",
                                                           ),
-
                                                           const Divider(),
                                                           custom_profile2(
                                                             "Current Location:  ",
@@ -325,13 +371,11 @@ class _SearchDonorState extends State<SearchDonor> {
                                                             "User: ",
                                                             "${data['type']}",
                                                           ),
-
                                                           const Divider(),
                                                           custom_profile2(
                                                             "Last Donate: ",
                                                             "${data['date']}",
                                                           ),
-                                                          
                                                           userAuth.currentUser!
                                                                       .email
                                                                       .toString() ==
@@ -355,110 +399,154 @@ class _SearchDonorState extends State<SearchDonor> {
                                                         ],
                                                       ),
                                                     ),
-                                                    Positioned(
-                                                        top: -25,
-                                                        child: Image.asset(
-                                                            "assets/icon/profilesee.png",
-                                                            width: 150,
-                                                            height: 150))
                                                   ],
                                                 ));
                                           });
                                         });
                                   },
-                                  child: Container(
-                                    height: 120,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(),
-                                      child: Row(
-                                        children: [
-                                          Center(
-                                              child: Text(
-                                            data["bloodGroup"],
-                                            style: const TextStyle(
-                                                fontSize: 30,
-                                                color:  Color(0xffB81736),),
-                                          )),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                  child: data["uservalue"] == 1
+                                      ? Container(
+                                          height: 140,
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.symmetric(),
+                                            child: Row(
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10),
-                                                  child: Text(
-                                                    "Nmae : ${data['name']}",
-                                                    style: const TextStyle(
-                                                        fontSize: 20),
+                                                Center(
+                                                    child: Text(
+                                                  data["bloodGroup"].toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: Color(0xffB81736),
                                                   ),
-                                                ),
-                                                Text(
-                                                  "Department : ${data['department']}",
-                                                  style: const TextStyle(
-                                                      fontSize: 20),
-                                                ),
-                                                Text(
-                                                  "Batch : ${data['batch']}",
-                                                  style: const TextStyle(
-                                                      fontSize: 20),
-                                                ),
+                                                )),
                                                 const SizedBox(
                                                   width: 20,
+                                                ),
+                                                Expanded(
+                                                    child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10),
+                                                      child: FittedBox(
+                                                        child: Text(
+                                                          "Name : ${data["name"]}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 16),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    FittedBox(
+                                                      child: Text(
+                                                        "Location : ${data["address"]}",
+                                                        style: const TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                    
+                                                    FittedBox(
+                                                      child: Text(
+                                                        "Last Donate : ${data["date"]}",
+                                                        style: const TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+
+
+                                                    // FittedBox(
+                                                    //   child: Text(
+                                                    //     "Last Donate : ${data["date"]} - ${_calculateDifference(context, data["date"]).toString()} Days",
+                                                    //     style: const TextStyle(
+                                                    //         fontSize: 16),
+                                                    //   ),
+                                                    // ),
+
+                                                    // _calculateDifference(
+                                                    //             context,
+                                                    //             data[
+                                                    //                 "date"])! >=
+                                                    //         90
+                                                    //     ? FittedBox(
+                                                    //         child: Row(
+                                                    //           children: [
+                                                    //             Text(
+                                                    //               // "Available : ${_daysDifference.toString()}",
+                                                    //               " Available for Donate",
+
+                                                    //               style: const TextStyle(
+                                                    //                   fontSize:
+                                                    //                       16,
+                                                    //                   color: Colors
+                                                    //                       .green),
+                                                    //             )
+                                                    //           ],
+                                                    //         ),
+                                                    //       )
+                                                    //     : FittedBox(
+                                                    //         child: Row(
+                                                    //           children: [
+                                                    //             Text(
+                                                    //               // "Available : ${_daysDifference.toString()}",
+                                                    //               "Not Available for Donate",
+
+                                                    //               style: const TextStyle(
+                                                    //                   fontSize:
+                                                    //                       16,
+                                                    //                   color: Colors
+                                                    //                       .red),
+                                                    //             )
+                                                    //           ],
+                                                    //         ),
+                                                    //       ),
+
+                                                    // ),
+                                                    const SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                  ],
+                                                )),
+                                                Wrap(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 50,
+                                                      width: 50,
+                                                      child: IconButton(
+                                                        onPressed: () async {
+                                                          final Uri url = Uri(
+                                                            scheme: "tel",
+                                                            path: data["Phone"],
+                                                          );
+                                                          if (await canLaunchUrl(
+                                                              url)) {
+                                                            await launchUrl(
+                                                                url);
+                                                          } else {
+                                                            // ignore: avoid_print
+                                                            print(
+                                                                "something went wrong");
+                                                          }
+
+                                                          //  canLaunchUrl(Uri(scheme: 'tel', path: '123'));
+                                                        },
+                                                        icon: Image.asset(
+                                                            'assets/icon/telephone.png'),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Wrap(
-                                            children: [
-                                              SizedBox(
-                                                height: 50,
-                                                width: 50,
-                                                child: IconButton(
-                                                  onPressed: () async {
-                                                    final Uri url = Uri(
-                                                      scheme: "tel",
-                                                      path: data["Phone"],
-                                                    );
-                                                    if (await canLaunchUrl(
-                                                        url)) {
-                                                      await launchUrl(url);
-                                                    } else {
-                                                      // ignore: avoid_print
-                                                      print(
-                                                          "something went wrong");
-                                                    }
-
-                                                    //  canLaunchUrl(Uri(scheme: 'tel', path: '123'));
-                                                  },
-                                                  icon: Image.asset(
-                                                      'assets/icon/telephone.png'),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                        )
+                                      : Center(),
                                 ),
                               ),
-                            )
-
-                            // ListTile(
-                            //   leading: Container(
-                            //     height: 50,
-                            //     width: 50,
-                            //     color: Colors.pink,
-                            //   ),
-                            //   title: Text(data['name']),
-                            //   subtitle: Text(data['phone']),
-                            // ),
-                            ),
+                            )),
                       );
                     }).toList(),
                   );

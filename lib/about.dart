@@ -10,9 +10,11 @@ class About extends StatefulWidget {
 }
 
 class _AboutState extends State<About> {
-
-
  
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +27,29 @@ class _AboutState extends State<About> {
             child: customAppBar(
                 context,
                 200,
-                const Color(0xffB81736),
-                const Color(0xff281537),
-                'assets/icon/baiust.png',
-                "   About \nDeveloper",
+                const Color.fromARGB(144, 4, 112, 45),
+               
+                'assets/icon/in.png',
+                "About \nDeveloper",
                 ""),
           ),
-          Center(
-            child: Image.asset(
-              "assets/icon/profilesee.png",
-              height: 190,
-              width: 200,
-            ),
-          ),
-         
-           const Padding(
+          
+          SizedBox(height: 30,),
+
+  
+          // Center(
+          //   child: Image.asset(
+          //     "assets/icon/homelogo.png",
+          //     height: 190,
+          //     width: 200,
+          //   ),
+          // ),
+          const Padding(
             padding: EdgeInsets.only(left: 5, right: 5),
             child: Center(
                 child: Text(
-              "Our Mission",strutStyle: StrutStyle(fontSize: 30),
+              "Our Mission",
+              strutStyle: StrutStyle(fontSize: 30),
               style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.w800,
@@ -51,7 +57,7 @@ class _AboutState extends State<About> {
             )),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: Text(
               Dummy.mission,
               textAlign: TextAlign.justify,
@@ -61,7 +67,7 @@ class _AboutState extends State<About> {
             ),
           ),
           const SizedBox(
-            height: 15,
+            height: 40,
           ),
           const Padding(
             padding: EdgeInsets.only(left: 5, right: 5),
@@ -76,7 +82,7 @@ class _AboutState extends State<About> {
           ),
           const Center(
               child: Text(
-            "Md.Zahid Hasan Buiyan",
+            "Md. Zahid Hasan Buiyan",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -84,7 +90,7 @@ class _AboutState extends State<About> {
           )),
           const Center(
               child: Text(
-            "EEE Department",
+            "Department of EEE",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -92,20 +98,20 @@ class _AboutState extends State<About> {
           )),
           const Center(
               child: Text(
-            "Batch : 17",
+            "Batch : 11",
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: Color.fromARGB(255, 23, 5, 85)),
           )),
           const SizedBox(
-            height: 15,
+            height: 40,
           ),
           const Padding(
             padding: EdgeInsets.only(left: 5, right: 5),
             child: Center(
                 child: Text(
-              "About Developer",
+              "Contact Us",
               style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.w800,
@@ -118,14 +124,23 @@ class _AboutState extends State<About> {
               Icon(Icons.mail),
               Center(
                   child: Text(
-                "  mdzahidhasasan@gmail.com",
+                " mdzahidhasasan@gmail.com",
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Color.fromARGB(255, 23, 5, 85)),
               )),
             ],
-          )
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Center(
+            child: Text(
+              "  powered by Department of EEE, BAIUST ",
+              style: TextStyle(fontSize: 16, color: Colors.blue),
+            ),
+          ),
         ],
       ),
     ));

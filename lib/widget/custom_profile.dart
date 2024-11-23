@@ -36,7 +36,7 @@ Widget custom_profile2(
     children: [
       Text(
         name,
-        style: const TextStyle(fontSize: 20),
+        style: const TextStyle(fontSize: 18),
       ),
       Expanded(
           child: Row(

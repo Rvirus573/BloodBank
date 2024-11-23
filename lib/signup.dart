@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_null_comparison
 
 import 'dart:async';
 
@@ -11,7 +11,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
+import 'package:toggle_switch/toggle_switch.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -23,20 +26,26 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerID = TextEditingController();
-
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
+  TextEditingController controllerAddress = TextEditingController();
+  TextEditingController controllerPhone = TextEditingController();
+  TextEditingController controllerDepartment = TextEditingController();
+  TextEditingController controllerBatch = TextEditingController();
 
   final firestore = FirebaseFirestore.instance.collection("users");
 
   final authUser = FirebaseAuth.instance;
 
-  String? studentEmployye;
+  String? studentEmployye = "";
+
   bool positive = false;
 
   String? idUser;
   String? idBlood;
+  String? formattedDate;
 
+  DateTime currentDate = DateTime.now();
   final _formkey = GlobalKey<FormState>();
 
   progressDailog() {
@@ -51,8 +60,16 @@ class _SignupState extends State<Signup> {
     );
   }
 
+  // currentDateTime() {
+  //   DateTime now = DateTime.now();
+  //   formattedDate = DateFormat('dd/MM/yyyy').format(now);
+  // }
+
+  String? categoryValue;
+  int uservalue = 1;
+
   // "name": controllerName.text,
-  //                             "id": controllerID ,
+  // "id": controllerID ,
 
   signUpUser(BuildContext context) async {
     try {
@@ -71,213 +88,41 @@ class _SignupState extends State<Signup> {
     }
   }
 
+  final List<String> nameList = <String>[
+    "Student",
+    "Alumni",
+    "Employee",
+  ];
+  String? _value1;
+
   Future writeRegistrationdata() async {
     // String id = DateTime.now().millisecondsSinceEpoch.toString();
-      
+
     idUser = controllerEmail.text;
     firestore.doc(idUser).set({
-      "type": studentEmployye.toString(),
+      "type": _value1.toString(),
       "name": controllerName.text,
       "studentid": controllerID.text,
       "email": controllerEmail.text,
-      'bloodGroup': "", // Stokes and Sons
-      'date': "",
-      'Phone': "",
-      'address': "",
-      "batch": "",
-      "department": "",
-      
+      'bloodGroup': categoryValue, // Stokes and Sons
+      "date": "",
+      'Phone': "+88${controllerPhone.text}",
+      'address': controllerAddress.text,
+      "batch": controllerBatch.text,
+      "department": controllerDepartment.text,
+      "uservalue": uservalue,
     });
-
-    
-
-    
   }
- 
 
-//   Future phoneAuth(String phoneNumber, context) async {
-//     final TextEditingController otpController = TextEditingController();
-//     FirebaseAuth auth = FirebaseAuth.instance;
+  // ignore: non_constant_identifier_names
+  bool Employee = true;
 
-//     if (kIsWeb) {
-//       try {
-//         ConfirmationResult confirmationResult =
-//             await auth.signInWithPhoneNumber(phoneNumber);
-//         showDialog(
-//             context: context,
-//             builder: (_) {
-//               return Dialog(
-//                 child: SafeArea(
-//                   child: SizedBox(
-//                     height: 400,
-//                     width: MediaQuery.of(context).size.width / 2,
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         PinCodeTextField(
-//                           autofocus: true,
-//                           controller: otpController,
-//                           hideCharacter: true,
-//                           highlight: true,
-//                           highlightColor: Colors.purple,
-//                           defaultBorderColor: Colors.blue,
-//                           hasTextBorderColor: Colors.transparent,
-//                           highlightPinBoxColor: Colors.transparent,
-//                           maxLength: 6,
-//                           pinBoxWidth: 35,
-//                           pinBoxHeight: 45,
-//                           pinBoxRadius: 10,
-//                           hasUnderline: true,
-//                           wrapAlignment: WrapAlignment.spaceAround,
-//                           pinBoxDecoration:
-//                               ProvidedPinBoxDecoration.defaultPinBoxDecoration,
-//                           pinTextStyle: const TextStyle(fontSize: 22.0),
-//                           pinTextAnimatedSwitcherTransition:
-//                               ProvidedPinBoxTextAnimation.scalingTransition,
-// //                    pinBoxColor: Colors.green[100],
-//                           pinTextAnimatedSwitcherDuration:
-//                               const Duration(milliseconds: 300),
-// //                    highlightAnimation: true,
-//                           highlightAnimationBeginColor: Colors.black,
-//                           highlightAnimationEndColor: Colors.white12,
-//                           keyboardType: TextInputType.number,
-//                         ),
-//                         ElevatedButton(
-//                           onPressed: () async {
-//                             try {
-//                               UserCredential userCredential =
-//                                   await confirmationResult.confirm(
-//                                 otpController.text,
-//                               );
-//                               if (userCredential.user != null) {
-//                                 //    print('Success');
+  @override
+  void initState() {
+    // currentDateTime();
 
-//                                 Get.toNamed(home);
-//                               } else {
-//                                 //      print('Failed');
-//                                 Navigator.pop(context);
-//                               }
-//                             } catch (e) {
-//                               //        print('Failed! Try Again.');
-//                               Navigator.pop(context);
-//                             }
-//                           },
-//                           child: const Text('continue'),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               );
-//             });
-//       } catch (e) {
-//         //     print('Something is wrong');
-//       }
-//     } else {
-//       try {
-//         await auth.verifyPhoneNumber(
-//           phoneNumber: phoneNumber,
-//           verificationCompleted: (PhoneAuthCredential credential) async {
-//             var result = await auth.signInWithCredential(credential);
-//             User? user = result.user;
-//             if (user!.uid.isNotEmpty) {
-//               Get.toNamed(home);
-//             }
-//           },
-//           verificationFailed: (FirebaseAuthException e) async {
-//             if (e.code == 'invalid-phone-number') {
-//               //   print("The provided phone number is not valid.");
-//             }
-//           },
-//           codeSent: (String verificationId, int? resendToken) async {
-//             return showDialog(
-//                 context: context,
-//                 builder: (_) {
-//                   return Dialog(
-//                     child: SafeArea(
-//                       child: SingleChildScrollView(
-//                         scrollDirection: Axis.vertical,
-//                         child: SizedBox(
-//                           height: 300,
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             children: [
-//                               PinCodeTextField(
-//                                 autofocus: true,
-//                                 controller: otpController,
-//                                 hideCharacter: true,
-//                                 highlight: true,
-//                                 highlightColor: Colors.purple,
-//                                 defaultBorderColor: Colors.blue,
-//                                 hasTextBorderColor: Colors.green,
-//                                 highlightPinBoxColor: Colors.transparent,
-//                                 maxLength: 6,
-//                                 pinBoxWidth: 35,
-//                                 pinBoxHeight: 45,
-//                                 pinBoxRadius: 10,
-//                                 hasUnderline: true,
-//                                 wrapAlignment: WrapAlignment.spaceAround,
-//                                 pinBoxDecoration: ProvidedPinBoxDecoration
-//                                     .defaultPinBoxDecoration,
-//                                 pinTextStyle: const TextStyle(fontSize: 22.0),
-//                                 pinTextAnimatedSwitcherTransition:
-//                                     ProvidedPinBoxTextAnimation
-//                                         .scalingTransition,
-// //                    pinBoxColor: Colors.green[100],
-//                                 pinTextAnimatedSwitcherDuration:
-//                                     const Duration(milliseconds: 300),
-// //                    highlightAnimation: true,
-//                                 highlightAnimationBeginColor: Colors.black,
-//                                 highlightAnimationEndColor: Colors.white12,
-//                                 keyboardType: TextInputType.number,
-//                               ),
-//                               ElevatedButton(
-//                                 onPressed: () async {
-//                                   try {
-//                                     PhoneAuthCredential phoneCredential =
-//                                         PhoneAuthProvider.credential(
-//                                       verificationId: verificationId,
-//                                       smsCode: otpController.text,
-//                                     );
-//                                     var result = await FirebaseAuth.instance
-//                                         .signInWithCredential(phoneCredential);
-//                                     User? user = result.user;
-//                                     if (user != null) {
-//                                       Navigator.pop(context);
-//                                       print("Success");
-//                                       Get.toNamed(home);
-
-//                                       final box = GetStorage();
-//                                       box.write("login_true", true);
-//                                     } else {
-//                                       print("Failed");
-//                                       Navigator.pop(context);
-//                                     }
-//                                   } catch (e) {
-//                                     print("Failed! Try Again.");
-//                                     Navigator.pop(context);
-//                                   }
-//                                 },
-//                                 child: const Text('Verify'),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   );
-//                 });
-//           },
-//           codeAutoRetrievalTimeout: (String verificationId) async {},
-//           timeout: const Duration(seconds: 60),
-//         );
-//       } catch (e) {
-//         //print('Something is wrong');
-//       }
-//     }
-//   }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -290,10 +135,10 @@ class _SignupState extends State<Signup> {
             customAppBar(
                 context,
                 190,
-                const Color.fromARGB(255, 247, 2, 116),
-                const Color.fromARGB(255, 6, 247, 135),
-                'assets/icon/baiust.png',
-                "     Signup",
+                const Color.fromARGB(144, 4, 112, 45),
+        
+                'assets/icon/in.png',
+                "BAIUST Blood Bank\n         Signup",
                 " "),
             const SizedBox(
               height: 15,
@@ -305,112 +150,300 @@ class _SignupState extends State<Signup> {
                   child: Column(
                     children: [
                       DropdownButton(
-                          isExpanded: true,
-                          hint: const Text('Are You ?',
-                              style: TextStyle(
-                                  fontSize: 15, color: Colors.black45)),
-                          value: studentEmployye,
-                          items: const [
-                            DropdownMenuItem(
-                                value: 'Student',
-                                child: Text('Student',
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.red))),
-                            DropdownMenuItem(
-                                value: 'Employee',
-                                child: Text('Employee',
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.red))),
-                            DropdownMenuItem(
-                                value: 'Alumni',
-                                child: Text('Alumni',
-                                    style: TextStyle(
-                                        fontSize: 17, color: Colors.red))),
-                          ],
-                          onChanged: (val) {
-                            setState(() {
-                              studentEmployye = val.toString();
-                            });
-                          }),
+                        isExpanded: true,
+                        hint: const Text('Are You ?',
+                            style:
+                                TextStyle(fontSize: 15, color: Colors.black45)),
+                        value: _value1,
+                        onChanged: (value) {
+                          setState(() {
+                            _value1 = value as String?;
+
+                            if (_value1 == "Employee") {
+                              Employee = true;
+                            } else {
+                              Employee = false;
+                            }
+                            print(_value1);
+                          });
+                        },
+                        items: nameList.map(
+                          (item) {
+                            return DropdownMenuItem(
+                              value: item,
+                              child: Text(item),
+                            );
+                          },
+                        ).toList(),
+                      ),
+
                       customTextFormField(controllerName, "Name", (value) {
                         if (value == null || value.isEmpty) {
-                          return "This Password field can not be  empty";
+                          return "This name field can not be  empty";
                         }
                         return null;
                       }),
                       const SizedBox(
                         height: 15,
                       ),
-                      customTextFormField(controllerID, "Id Number", (value) {
-                        if (studentEmployye == "Student") {
-                          if (value!.contains(RegExp(r'^082'))) {
-                            if (value.length != 5) {
-                              return "Enter 11 digit Student Id";
-                            }
-                          } else {
-                            return "Enter Valid Student Id";
+                      customTextFormField(
+                          controllerID, "Student ID/ Empolyee ID", (value) {
+                        if (_value1 == "Student" || _value1 == "Alumni") {
+                          if (value == null || value.isEmpty) {
+                            return "This ID can not be  empty";
                           }
-                        } else if (studentEmployye == "Employee" &&
-                            value!.length != 8) {
-                        } else if (studentEmployye == "Alumni") {
-                          if (value!.contains(RegExp(r'^082'))) {
-                            if (value.length != 4) {
-                              return "Enter 11 digit Student Id";
-                            }
-                          } else {
-                            return "Enter Valid Student Id";
-                          }
+                          // if (value.length != 7) {
+                          //   return "This Student Id Can be 7 Digit";
+                          // }
+
+                          // if (value.contains(RegExp(r'^082'))) {
+                          // } else {
+                          //   return "Enter Valid Student Id";
+                          // }
                         }
+                        //else if (value!.length != 6) {
+                        //   return "Employee Id Can be 6 Digit";
+                        // }
+                        if (value!.isEmpty) {
+                          return "This field can not be  empty";
+                        }
+
                         return null;
                       }, TextInputType.number),
                       const SizedBox(
                         height: 15,
                       ),
-                      customTextFormField(controllerEmail, "Email", (value) {
+                      customTextFormField(controllerEmail, "Personal Email",
+                          (value) {
                         if (EmailValidator.validate(controllerEmail.text)) {
                         } else {
-                          return "Please enter a valid email";
+                          return "Please enter a valid personal email";
                         }
                         return null;
                       }, TextInputType.emailAddress),
                       const SizedBox(
                         height: 15,
                       ),
-                      customTextFormField(controllerPassword, "Password",
-                          (value) {
+                      customTextFormField(
+                          controllerPassword, "Password for this app", (value) {
                         if (value == null || value.isEmpty) {
                           return "This Password field can not be  empty";
                         } else if (value.length < 8) {
                           return "Password must be 8 characters";
                         }
                         return null;
-                      }, TextInputType.visiblePassword,true),
+                      }, TextInputType.visiblePassword, true),
+
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      // customTextField(controllerEmail, "Email")
+                      Center(
+                          child: Text(
+                        "Your Present Status in this App",
+                        style: TextStyle(fontSize: 20, color: Colors.blue),
+                      )),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ToggleSwitch(
+                        minWidth: 200.0,
+                        initialLabelIndex: 1,
+                        cornerRadius: 20,
+                        activeFgColor: Colors.white,
+                        inactiveBgColor: Colors.grey,
+                        inactiveFgColor: Colors.black,
+                        totalSwitches: 2,
+                        labels: [
+                          '  General User\nReceived Blood',
+                          '    Blood Donor\nReceived & Donate'
+                        ],
+                        activeBgColors: [
+                          [Colors.blue],
+                          [Color(0xffB81736)]
+                        ],
+                        onToggle: (index) {
+                          // print('switched to: $index');
+                          uservalue = index!;
+                          print("reza $uservalue");
+                        },
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      DropdownButton(
+                          underline: Container(
+                            height: 1,
+                            color: Colors
+                                .grey, // Customize the color of the underline
+                          ),
+                          isExpanded: true,
+                          hint: const Text('Select Blood category',
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.black45)),
+                          value: categoryValue,
+                          style: const TextStyle(
+                            decorationColor: Colors
+                                .black, // Customize the color of the underline
+                            decorationThickness:
+                                1, // Customize the thickness of the underline
+                            decorationStyle: TextDecorationStyle
+                                .solid, // Customize the style of the underline
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                                value: 'A+',
+                                child: Text('A+',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'A-',
+                                child: Text('A-',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'B+',
+                                child: Text('B+',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'B-',
+                                child: Text('B-',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'O+',
+                                child: Text('O+',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'O-',
+                                child: Text('O-',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'AB+',
+                                child: Text('AB+',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                            DropdownMenuItem(
+                                value: 'AB-',
+                                child: Text('AB-',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black))),
+                          ],
+                          onChanged: (val) {
+                            setState(() {
+                              categoryValue = val.toString();
+                            });
+                          }),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      customTextFormField(controllerPhone, "Phone Number",
+                          (value) {
+                        if (value == null || value.isEmpty) {
+                          return "This Phone Number field can not be  empty";
+                        } else if (value.length < 11) {
+                          return "Phone Number must be 11 characters";
+                        }
+                        return null;
+                      }),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      customTextFormField(controllerAddress, "Address",
+                          (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Address field can not be  empty";
+                        }
+                        return null;
+                      }),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Visibility(
+                        visible: !Employee,
+                        child: customTextFormField(
+                            controllerDepartment, "Department", (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Department field can not be  empty";
+                          }
+                          return null;
+                        }),
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      Visibility(
+                        visible: !Employee,
+                        child: customTextFormField(controllerBatch, "Batch",
+                            (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Batch field can not be  empty";
+                          }
+                          return null;
+                        }),
+                      ),
+
                       const SizedBox(
                         height: 15,
                       ),
-                      customElevetedButton("Sign Up",
-                          const MaterialStatePropertyAll(Colors.green), () {
-                        //  var number = "+88${controllerPhone.text}";
-                        //  phoneAuth(number, context);
+                      customElevetedButton(
+                          "Sign Up", const WidgetStatePropertyAll(Colors.green),
+                          () {
+                        if (_formkey.currentState!.validate()) {
+                          signUpUser(context);
+                          writeRegistrationdata();
 
-                        signUpUser(context);
-                        writeRegistrationdata();
+                          controllerName.clear();
+                          controllerID.clear();
+                          studentEmployye = "";
 
-                        
-                        
-                        controllerName.clear();
-                        controllerID.clear();
-                        studentEmployye = "";
+                          controllerEmail.clear();
 
-                        controllerEmail.clear();
+                          print("Id 1 : $idUser");
+                          print("Id 2 : $idBlood");
 
-                        print("Id 1 : $idUser");
-                        print("Id 2 : $idBlood");
+                          Get.toNamed(home);
 
-                        Get.toNamed(home);
+                          // Get.snackbar("success", "message");
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: " Please fillup all Fields ",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+
+                        // ignore: unrelated_type_equality_checks,
+                        // if (_value1 == null ||
+                        //     controllerName == null ||
+                        //     controllerPassword == null ||
+                        //     controllerID == null ||
+                        //     controllerAddress == null ||
+                        //     controllerEmail == null ||
+                        //     controllerPhone == null ||
+                        //     controllerPhone == null) {
+                        //   Fluttertoast.showToast(
+                        //       msg: "Please fillup all Fields");
+                        // } else {
+
+                        // }
                       }),
 
-                       const SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Padding(
@@ -435,6 +468,10 @@ class _SignupState extends State<Signup> {
                                 ]),
                           ),
                         ),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
                       ),
                     ],
                   ),

@@ -1,5 +1,6 @@
 import 'package:bloodbank/about.dart';
-import 'package:bloodbank/blood_registration.dart';
+import 'package:bloodbank/feedback.dart';
+import 'package:bloodbank/user_status.dart';
 import 'package:bloodbank/forgot_password.dart';
 import 'package:bloodbank/home.dart';
 import 'package:bloodbank/information.dart';
@@ -22,6 +23,7 @@ const String signup = "/signup";
 const String profile = "/profile";
 const String information = "/information";
 const String forgotpassword = "/forgotpassword";
+const String feedback = "/feedback";
 
 List<GetPage> getpages = [
   GetPage(name: home, page: () => const Home()),
@@ -35,4 +37,5 @@ List<GetPage> getpages = [
   GetPage(name: profile, page: () => const Profile()),
   GetPage(name: information, page: () => const Information()),
   GetPage(name: forgotpassword, page: () => const ForgotPassword()),
+  GetPage(name: feedback, page: () => const Feedback()),
 ];

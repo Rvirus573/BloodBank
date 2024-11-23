@@ -53,10 +53,10 @@ class _LoginState extends State<Login> {
             child: customAppBar(
                 context,
                 190,
-                const Color(0xffB81736),
-                const Color(0xff281537),
-                'assets/icon/baiust.png',
-                "      Login",
+             const Color.fromARGB(144, 4, 112, 45),
+               
+                'assets/icon/in.png',
+                "BAIUST Blood Bank\n       Login",
                 " "),
           ),
           Expanded(
@@ -99,7 +99,7 @@ class _LoginState extends State<Login> {
                           return "Password must be 8 characters";
                         }
                         return null;
-                      }, TextInputType.visiblePassword,true     ),
+                      }, TextInputType.visiblePassword, true),
                       const SizedBox(
                         height: 10,
                       ),
@@ -115,9 +115,9 @@ class _LoginState extends State<Login> {
                                 // Get.snackbar("success", "message");
                               } else {
                                 Fluttertoast.showToast(
-                                    msg: " Invalid",
+                                    msg: " Please enter your email and password ",
                                     toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
+                                    gravity: ToastGravity.BOTTOM,
                                     timeInSecForIosWeb: 1,
                                     backgroundColor: Colors.red,
                                     textColor: Colors.white,
@@ -139,7 +139,7 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.centerLeft,
                           child: RichText(
                               text: TextSpan(
                                   text: 'Forgot Password',

@@ -56,19 +56,23 @@ class _HomeState extends State<Home> {
       'name': 'Search Donor',
       'picture': 'assets/icon/bloodsearch.png',
     },
-    {'name': 'Registration', 'picture': 'assets/icon/bloodadd.png'},
-    {'name': 'Profile', 'picture': 'assets/icon/bloodsearch.png'},
+    {'name': 'Set Your Status', 'picture': 'assets/icon/bloodadd2.png'},
+    {'name': 'Personal Profile', 'picture': 'assets/icon/profile.png'},
     {
       'name': 'Terms   &\nConditions',
       'picture': 'assets/icon/tac.png',
     },
     {
       'name': 'Information',
-      'picture': 'assets/icon/bloodsearch.png',
+      'picture': 'assets/icon/info.png',
     },
     {
       'name': 'About',
-      'picture': 'assets/icon/bloodsearch.png',
+      'picture': 'assets/icon/dev.png',
+    },
+    {
+      'name': 'Feedback',
+      'picture': 'assets/icon/feedback.png',
     },
     // Add more items as needed
   ];
@@ -79,6 +83,7 @@ class _HomeState extends State<Home> {
     "terms",
     "information",
     "about",
+    "feedback",
   ];
 
   @override
@@ -87,7 +92,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Container(
-            height: 200,
+            height: 190,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
                 // image: DecorationImage(
@@ -96,10 +101,13 @@ class _HomeState extends State<Home> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(0),
                     bottomRight: Radius.elliptical(45, 30)),
-                gradient: LinearGradient(colors: [
-                  Color(0xffB81736),
-                  Color(0xff281537),
-                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+                // gradient: LinearGradient(colors: [
+                //   Color(0xffB81736),
+                //   Color(0xff281537),
+                // ], begin: Alignment.bottomCenter, end: Alignment.topCenter)
+                color:  Color.fromARGB(144, 4, 112, 45),
+                
+                ),
             child: Stack(
               children: [
                 Center(
@@ -112,13 +120,13 @@ class _HomeState extends State<Home> {
                         Row(
                           children: [
                             Image.asset(
-                              'assets/icon/baiust.png',
+                              'assets/icon/in.png',
                               height: 120,
                               width: 120,
                             ),
                             const Center(
                               child: Text(
-                                "Donate Blood \n    Save Life",
+                                " Donate Blood \n     Save Life",
                                 style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.w900,
@@ -126,12 +134,15 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             const SizedBox(
-                              width: 5,
+                              width: 15,
                             ),
                             IconButton(
+                              highlightColor: Colors.white,
+                              color: Colors.red,
                                 onPressed: () {
                                   signOut();
                                   Get.toNamed(login);
+                                  
                                 },
                                 icon: const Icon(
                                   Icons.logout_outlined,
@@ -172,71 +183,6 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
-
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 30),
-            //   child: Row(
-            //     children: [
-            //       Padding(
-            //         padding: const EdgeInsets.only(left: 15),
-            //         child: customInkwell(
-            //             'assets/icon/bloodsearch.png', "Search Donor", () {
-            //           Get.toNamed(search);
-            //         }),
-            //       ),
-            //       const SizedBox(
-            //         width: 10,
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.only(right: 15),
-            //         child: customInkwell(
-            //             'assets/icon/bloodadd.png', "Registration", () {
-            //           // ignore: avoid_print
-
-            //           Get.toNamed(registration);
-            //         }),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 30,
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(),
-            //   child: Row(
-            //     mainAxisSize: MainAxisSize.max,
-
-            //     //  customInkwell('assets/icon/baiust.png', "data"),
-            //     children: [
-            //       Padding(
-            //         padding: const EdgeInsets.only(left: 15),
-            //         child: customInkwell(
-            //             'assets/icon/tac.png', "Terms and \nConditions ",
-            //             () {
-            //           Get.toNamed(terms);
-            //         }),
-            //       ),
-            //       const SizedBox(
-            //         width: 10,
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.only(right: 15),
-            //         child:
-            //             customInkwell('assets/icon/dev.png', "About", () {
-            //           Get.toNamed(about);
-            //         }),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 15),
-            //   child: customInkwell('assets/icon/bloodsearch.png', "Profile",
-            //       () {
-            //     Get.toNamed(profile);
-            //   }),
-            // ),
           ),
         ],
       ),

@@ -15,7 +15,7 @@ Widget customContainerInkwell(ontap, String name) {
               child: Text(
             name,
             style: const TextStyle(
-                fontSize: 30, color: Color.fromARGB(255, 53, 2, 12)),
+                fontSize: 30, color: Colors.white),
           )),
         )),
   );

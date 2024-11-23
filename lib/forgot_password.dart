@@ -29,9 +29,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             customAppBar(
                 context,
                 200,
-                const Color(0xffB81736),
-                const Color(0xff281537),
-                'assets/icon/baiust.png',
+               const Color.fromARGB(144, 4, 112, 45),
+             
+                'assets/icon/in.png',
                 "Forgot Password",
                 ""),
             const SizedBox(

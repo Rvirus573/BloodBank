@@ -44,6 +44,17 @@ class _SplashState extends State<Splash> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "BAIUST Blood Bank",
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.pink,
+                   fontFamily: 'Adlery Pro',
+                  
+                  ),
+                
+            ),
             Lottie.asset(
               'assets/animation/bloodjson.json',
               height: 300,

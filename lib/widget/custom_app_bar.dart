@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget customAppBar(context, double hight, Color gColor1, Color gColor2,
+Widget customAppBar(context, double hight, Color gColor1,
     imageicon, String text1, String text2) {
   return Container(
     height: hight,
@@ -12,10 +12,13 @@ Widget customAppBar(context, double hight, Color gColor1, Color gColor2,
         borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(0),
             bottomRight: Radius.elliptical(45, 30)),
-        gradient: LinearGradient(
-            colors: [gColor1, gColor2],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter)),
+        // gradient: LinearGradient(
+        //     colors: [gColor1, gColor2],
+        //     begin: Alignment.bottomCenter,
+        //     end: Alignment.topCenter)
+        color: gColor1
+            
+            ),
     child: Stack(
       children: [
         Center(
@@ -27,31 +30,48 @@ Widget customAppBar(context, double hight, Color gColor1, Color gColor2,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
                       imageicon,
-                      height: 120,
-                      width: 120,
+                      height: 130,
+                      width: 130,
                     ),
-                    Center(
-                      child: Text(
-                        text1,
-                        style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white),
+
+                    
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: FittedBox(
+                            child: Text(
+                              text1,
+                              style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Center(
-                  child: Text(text2,
+                      Center(
+                 child:  Text(text2,
                       // ignore: prefer_const_constructors
                       style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w900,
-                          color: Colors.cyan)),
+                          color: const Color.fromARGB(255, 0, 0, 0))),
                 ),
+                        ],
+                      )
+                       
+                    ),
+                  ],
+                ),
+                
               ],
             ),
           ),

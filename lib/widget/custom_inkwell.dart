@@ -9,7 +9,7 @@ Widget customInkwell(String image, String name, ontap) {
       child: Card(
         elevation: 3,
         shadowColor: Colors.red,
-        color: Colors.pink[50],
+        color: const Color.fromARGB(255, 207, 233, 223),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

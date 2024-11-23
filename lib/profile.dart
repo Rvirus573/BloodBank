@@ -26,7 +26,9 @@ class _ProfileState extends State<Profile> {
   final _formkey = GlobalKey<FormState>();
   String displayname = "";
   String date = "";
+  String availabe = "";
   String name = "";
+  String? uservalue1;
 
   fetchDisplayName() async {
     DocumentSnapshot<Map<String, dynamic>> userDoc =
@@ -42,10 +44,13 @@ class _ProfileState extends State<Profile> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
-    date = " ${pickDate?.day}/${pickDate?.month}/${pickDate?.year}";
+    date = "${pickDate?.day}/${pickDate?.month}/${pickDate?.year}"; //
     UpadateProfileDate();
     setState(() {});
   }
+  
+
+
 
   Future UpadateProfilePhone() async {
     // String id = DateTime.now().millisecondsSinceEpoch.toString();
@@ -106,166 +111,174 @@ class _ProfileState extends State<Profile> {
       key: _formkey,
       autovalidateMode: AutovalidateMode.always,
       child: Scaffold(
-        body: SafeArea(
-          child: Column(children: [
-            customAppBar(
-                context,
-                200,
-                const Color(0xffB81736),
-                const Color(0xff281537),
-                'assets/icon/baiust.png',
-                "Profile Update",
-                "   $name"),
-            const SizedBox(
-              height: 10,
+        body: Column(children: [
+          customAppBar(
+              context,
+              200,
+              const Color.fromARGB(144, 4, 112, 45),
+              'assets/icon/in.png',
+              "Profile Update",
+              ""),  // "$name"),
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: userStream,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text("Loading");
+                }
+
+                return ListView(
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+
+                    if ("${data['uservalue']}" == "0") {
+                      uservalue1 = "GeneraL User";
+                    //  print(uservalue1);
+                    }
+                    if ("${data['uservalue']}" != "0") {
+                      uservalue1 = "Blood Donor";
+                   //   print(uservalue1);
+                    }
+
+                    return Padding(
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          custom_profile(
+                            "Name: ",
+                            "${data['name']}",
+                          ),
+                          const Divider(),
+                          custom_profile(
+                            "Department: ",
+                            "${data['department']}",
+                          ),
+                          const Divider(),
+                          custom_profile(
+                            "Batch: ",
+                            "${data['batch']}",
+                          ),
+                          const Divider(),
+                          custom_profile("Phone: ", "${data['Phone']}", () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => SizedBox(
+                                height: 500,
+                                child: AlertDialog(
+                                  title: const Text("Update Phone Number",
+                                      style: TextStyle(fontSize: 20)),
+                                  actions: [
+                                    customTextFormField(
+                                        controllerPhone, "11 Digit Number",
+                                        (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "This Password field can not be  empty";
+                                      } else if (value.length < 11) {
+                                        return "Password must be 11 characters";
+                                      }
+                                      return null;
+                                    }),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    customElevetedButton(
+                                        "Update",
+                                        const WidgetStatePropertyAll(
+                                            Colors.green), () {
+                                      UpadateProfilePhone();
+                                      Get.back();
+                                    })
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                          const Divider(),
+                          custom_profile(
+                            "Blood Group: ",
+                            "${data['bloodGroup']}",
+                          ),
+                          const Divider(),
+                          custom_profile(
+                            "Email: ",
+                            "${data['email']}",
+                          ),
+                          const Divider(),
+                          custom_profile(
+                              "Current Location:  ", "${data['address']}", () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => SizedBox(
+                                height: 500,
+                                width: double.infinity,
+                                child: AlertDialog(
+                                  title: const Text("Update Current Location",
+                                      style: TextStyle(fontSize: 20)),
+                                  actions: [
+                                    customTextFormField(
+                                        controllerLocation, "Location ",
+                                        (value) {
+                                      return null;
+                                    }),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    customElevetedButton(
+                                        "Update",
+                                        const WidgetStatePropertyAll(
+                                            Colors.green), () {
+                                      UpadateProfileLocation();
+                                      Get.back();
+                                    })
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                          const Divider(),
+                          custom_profile(
+                            "User: ",
+                            "${data['type']}",
+                          ),
+                          const Divider(),
+                          custom_profile(
+                            "Id: ",
+                            "${data['studentid']}",
+                          ),
+                          const Divider(),
+                          custom_profile("Last Donate: ", "${data['date']}",
+                              () {
+                            pickDate(context);
+                            setState(() {});
+                          }),
+                          const Divider(),
+                          custom_profile(
+                              "User Status: ", uservalue1.toString()),
+                          const Divider(),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
             ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: userStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text("Loading");
-                  }
-
-                  return ListView(
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data()! as Map<String, dynamic>;
-
-                      return Padding(
-                        padding:
-                            const EdgeInsets.only(left: 10, right: 10, top: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            custom_profile(
-                              "Name: ",
-                              "${data['name']}",
-                            ),
-                            const Divider(),
-                            custom_profile(
-                              "Department: ",
-                              "${data['department']}",
-                            ),
-                            const Divider(),
-                            custom_profile(
-                              "Batch: ",
-                              "${data['batch']}",
-                            ),
-                            const Divider(),
-                            custom_profile("Phone: ", "${data['Phone']}", () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => SizedBox(
-                                  height: 500,
-                                  child: AlertDialog(
-                                    title: const Text("Update Phone Number",
-                                        style: TextStyle(fontSize: 20)),
-                                    actions: [
-                                      customTextFormField(
-                                          controllerPhone, "11 Digit Number",
-                                          (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "This Password field can not be  empty";
-                                        } else if (value.length < 11) {
-                                          return "Password must be 11 characters";
-                                        }
-                                        return null;
-                                      }),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      customElevetedButton(
-                                          "Update",
-                                          const MaterialStatePropertyAll(
-                                              Colors.green), () {
-                                        UpadateProfilePhone();
-                                        Get.back();
-                                      })
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                            const Divider(),
-                            custom_profile(
-                              "Blood Group: ",
-                              "${data['bloodGroup']}",
-                            ),
-                            const Divider(),
-                            custom_profile(
-                              "Email: ",
-                              "${data['email']}",
-                            ),
-                            const Divider(),
-                            custom_profile(
-                                "Current Location:  ", "${data['address']}",
-                                () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => SizedBox(
-                                  height: 500,
-                                  width: double.infinity,
-                                  child: AlertDialog(
-                                    title: const Text("Update Current Location",
-                                        style: TextStyle(fontSize: 20)),
-                                    actions: [
-                                      customTextFormField(
-                                          controllerLocation, "Location ",
-                                          (value) {
-                                        return null;
-                                      }),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      customElevetedButton(
-                                          "Update",
-                                          const MaterialStatePropertyAll(
-                                              Colors.green), () {
-                                        UpadateProfileLocation();
-                                        Get.back();
-                                      })
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                            const Divider(),
-                            custom_profile(
-                              "User: ",
-                              "${data['type']}",
-                            ),
-                            const Divider(),
-                            custom_profile(
-                              "Id: ",
-                              "${data['studentid']}",
-                            ),
-                            const Divider(),
-                            custom_profile("Last Donate: ", "${data['date']}",
-                                () {
-                              pickDate(context);
-                              setState(() {});
-                            }),
-                            const Divider(),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-            )
-          ]),
-        ),
+          )
+        ]),
       ),
     );
   }
